@@ -1,3 +1,5 @@
+require "virtus"
+
 module IRail
   class Station
     include Virtus

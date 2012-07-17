@@ -1,7 +1,7 @@
-require_relative "../lib/irail.rb"
+require_relative "../lib/ruby-irail/api.rb"
 
-describe IRail do
-  let(:irail) { IRail.new }
+describe IRail::API do
+  let(:irail) { IRail::API.new }
 
   describe :stations do
     let(:stations)         { mock("Stations") }
@@ -36,7 +36,7 @@ describe IRail do
     before :each do
       irail.stub(:build_station_list_url => station_list_url)
       irail.stub(:get_station_list => xml_station_list)
-      DocumentParser.stub(:parse_stations => stations)
+      IRail::DocumentParser.stub(:parse_stations => stations)
     end
 
     it "builds the station list url" do
@@ -59,11 +59,11 @@ describe IRail do
     let(:response) { mock("Response") }
 
     before :each do
-      Request.stub(:get => response)
+      IRail::Request.stub(:get => response)
     end
 
     it "calls the station list url through a get request" do
-      Request.should_receive(:get).with(url)
+      IRail::Request.should_receive(:get).with(url)
       irail.get_station_list(url)
     end
 

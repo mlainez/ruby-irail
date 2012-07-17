@@ -1,7 +1,7 @@
-require_relative '../../lib/models/station.rb'
+require_relative '../../lib/ruby-irail/models/station.rb'
 
-describe Station do
-  let(:station) { Station.new }
+describe IRail::Station do
+  let(:station) { IRail::Station.new }
 
   it "has an id" do
     station.should respond_to(:id)

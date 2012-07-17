@@ -1,6 +1,6 @@
-require_relative "../../lib/http/request.rb"
+require_relative "../../lib/ruby-irail/http/request.rb"
 
-describe Request do
+describe IRail::Request do
   class HTTParty
   end
 
@@ -18,16 +18,16 @@ describe Request do
 
     it "calls the get method of HTTParty with the url as param" do
       HTTParty.should_receive(:get).with(url)
-      Request.get(url)
+      IRail::Request.get(url)
     end
 
     it "gets the body from the response" do
       response.should_receive(:body)
-      Request.get(url)
+      IRail::Request.get(url)
     end
 
     it "returns the response body" do
-      Request.get(url).should eql body
+      IRail::Request.get(url).should eql body
     end
   end
 end

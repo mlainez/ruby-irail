@@ -1,5 +1,4 @@
 require "httparty"
-require "virtus"
 require "nokogiri"
 
 require File.join(File.dirname(__FILE__), 'ruby-irail', 'api')
