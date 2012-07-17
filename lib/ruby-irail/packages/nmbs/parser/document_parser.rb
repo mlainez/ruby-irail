@@ -6,8 +6,7 @@ module IRail::NMBS
       xml_payload  = Nokogiri::XML(xml_string)
       xml_stations = xml_payload.xpath(STATION_XPATH)
       xml_stations.inject([]) do |stations, xml_station|
-        attributes = IRail::NMBS::StationParser.parse(xml_station)
-        stations << IRail::NMBS::Station.new(attributes)
+        stations << IRail::NMBS::Station.from_xml(xml_station.to_s)
       end
     end
   end

@@ -16,6 +16,6 @@ Gem::Specification.new do |gem|
   gem.version       = IRail::VERSION
   gem.add_development_dependency "rspec"
   gem.add_dependency "httparty"
-  gem.add_dependency "virtus"
+  gem.add_dependency "roxml"
   gem.add_dependency "nokogiri"
 end

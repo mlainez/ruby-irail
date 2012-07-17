@@ -6,9 +6,6 @@ describe IRail::NMBS::DocumentParser do
     end
   end
 
-  class IRail::NMBS::StationParser
-  end
-
   class IRail::NMBS::Station
   end
 
@@ -16,12 +13,11 @@ describe IRail::NMBS::DocumentParser do
     let(:xml_string)  { mock("Xml string") }
     let(:xml_payload) { mock("Xml payload") }
     let(:stations)    { [ mock("Station"), mock("Station"), mock("Station") ] }
-    let(:attributes)  { {} }
 
     before :each do
       Nokogiri.stub(:XML => xml_payload)
       xml_payload.stub(:xpath => stations)
-      IRail::NMBS::StationParser.stub(:parse => attributes)
+      IRail::NMBS::Station.stub(:from_xml)
     end
 
     it "gets the xml payload from the string passed as parameter" do
@@ -34,16 +30,9 @@ describe IRail::NMBS::DocumentParser do
       IRail::NMBS::DocumentParser.parse_stations(xml_string)
     end
 
-    it "parses the attributes of all stations" do
-      stations.each do |xml_station|
-        IRail::NMBS::StationParser.should_receive(:parse).with(xml_station)
-      end
-      IRail::NMBS::DocumentParser.parse_stations(xml_string)
-    end
-
     it "creates a new station for all parsed station attributes" do
       stations.each do |station|
-        IRail::NMBS::Station.should_receive(:new).with(attributes)
+        IRail::NMBS::Station.should_receive(:from_xml).with(station.to_s)
       end
       IRail::NMBS::DocumentParser.parse_stations(xml_string)
     end

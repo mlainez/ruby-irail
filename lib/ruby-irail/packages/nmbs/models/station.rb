@@ -1,13 +1,13 @@
-require "virtus"
+require "roxml"
 
 module IRail::NMBS
   class Station
-    include Virtus
+    include ROXML
 
-    attribute :id, String
-    attribute :latitude, Float
-    attribute :longitude, Float
-    attribute :standard_name, String
-    attribute :name, String
+    xml_accessor :id,            :from => "@id"
+    xml_accessor :latitude,      :from => "@locationX", :as => Float
+    xml_accessor :longitude,     :from => "@locationY", :as => Float
+    xml_accessor :standard_name, :from => "@standardname"
+    xml_accessor :name,          :from => :content
   end
 end
