@@ -1,8 +1,8 @@
-API_URL      = "http://api.irail.be"
-STATIONS_URI = "stations/"
-
 module IRail::API
   class NMBS
+    API_URL      = "http://api.irail.be"
+    STATIONS_URI = "stations/"
+
     def stations
       @stations ||= get_stations
     end

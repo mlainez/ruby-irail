@@ -1,4 +1,4 @@
-require_relative "../../../lib/ruby-irail/nmbs/parser/station_parser.rb"
+require_relative "../../../../lib/ruby-irail/packages/nmbs/parser/station_parser.rb"
 
 describe IRail::NMBS::StationParser do
   describe :'self.parse' do

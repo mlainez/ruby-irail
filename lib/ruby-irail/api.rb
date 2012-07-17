@@ -2,7 +2,9 @@ module IRail
   module API
     SUPPORTED_APIS = {
       :nmbs => "NMBS",
-      :sncb => "NMBS"
+      :sncb => "NMBS",
+      :stib => "MIVBSTIB",
+      :mivb => "MIVBSTIB"
     }
 
     def self.new(provider = :nmbs)

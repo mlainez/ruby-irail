@@ -1,7 +1,7 @@
-require_relative '../../../lib/ruby-irail/nmbs/models/station.rb'
+require_relative '../../../../lib/ruby-irail/packages/mivbstib/models/station.rb'
 
-describe IRail::NMBS::Station do
-  let(:station) { IRail::NMBS::Station.new }
+describe IRail::MIVBSTIB::Station do
+  let(:station) { IRail::MIVBSTIB::Station.new }
 
   it "has an id" do
     station.should respond_to(:id)
@@ -13,10 +13,6 @@ describe IRail::NMBS::Station do
 
   it "has an longitude" do
     station.should respond_to(:longitude)
-  end
-
-  it "has a standard name" do
-    station.should respond_to(:standard_name)
   end
 
   it "has a name" do
