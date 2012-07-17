@@ -24,7 +24,7 @@ Or install it yourself as:
 # get a list of all belgian train stations
 
 require "ruby-irail"
-irail = IRail.new
+irail = IRail::API.new
 irail.stations
 ```
 
