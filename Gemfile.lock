@@ -1,3 +1,11 @@
+PATH
+  remote: .
+  specs:
+    ruby-irail (0.1.0)
+      httparty
+      nokogiri
+      virtus
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -24,7 +32,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  httparty
-  nokogiri
   rspec
-  virtus
+  ruby-irail!
