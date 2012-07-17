@@ -12,8 +12,8 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(spec)/})
   gem.name          = "ruby-irail"
-  gem.require_paths = ["lib"]
-  gem.version       = IRail::VERSION
+  gem.require_paths = ["lib", "lib/http"]
+  gem.version       = Version::VERSION
   gem.add_development_dependency "rspec"
   gem.add_dependency "httparty"
   gem.add_dependency "virtus"
