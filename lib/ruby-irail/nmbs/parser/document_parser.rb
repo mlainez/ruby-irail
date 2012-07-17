@@ -1,4 +1,4 @@
-module IRail
+module IRail::NMBS
   class DocumentParser
     STATION_XPATH = "//station"
 
@@ -6,8 +6,8 @@ module IRail
       xml_payload  = Nokogiri::XML(xml_string)
       xml_stations = xml_payload.xpath(STATION_XPATH)
       xml_stations.inject([]) do |stations, xml_station|
-        attributes = StationParser.parse(xml_station)
-        stations << Station.new(attributes)
+        attributes = IRail::NMBS::StationParser.parse(xml_station)
+        stations << IRail::NMBS::Station.new(attributes)
       end
     end
   end

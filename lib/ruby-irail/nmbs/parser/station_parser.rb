@@ -1,4 +1,4 @@
-module IRail
+module IRail::NMBS
   class StationParser
     def self.parse(xml_payload)
       id            = parse_station_id(xml_payload)

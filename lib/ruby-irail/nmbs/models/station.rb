@@ -1,6 +1,6 @@
 require "virtus"
 
-module IRail
+module IRail::NMBS
   class Station
     include Virtus
 
