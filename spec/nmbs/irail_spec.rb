@@ -1,7 +1,7 @@
 require_relative "../../lib/ruby-irail/nmbs/api.rb"
 
-describe IRail::NMBS::API do
-  let(:irail) { IRail::NMBS::API.new }
+describe IRail::API::NMBS do
+  let(:irail) { IRail::API::NMBS.new }
 
   describe :stations do
     let(:stations)         { mock("Stations") }

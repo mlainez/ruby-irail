@@ -6,7 +6,8 @@ module IRail
     }
 
     def self.new(provider = :nmbs)
-      eval("IRail::#{api_name_for_provider(provider)}::API").new
+      klass = api_name_for_provider(provider)
+      const_get(klass).new
     end
 
     def self.api_name_for_provider(provider)
