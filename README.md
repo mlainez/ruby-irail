@@ -2,6 +2,8 @@
 
 IRail makes Belgian railway schedule easily available for anyone.
 
+Check it out on [http://project.irail.be/](http://project.irail.be/)
+
 There are already several wrappers available in different languages. This is a Ruby wrapper for their API.
 
 ## Installation
