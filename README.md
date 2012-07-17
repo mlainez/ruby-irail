@@ -41,7 +41,7 @@ irail.stations
 All tests are in the specs folder. To run them simply run the following from the root folder of your fork:
 
 ```ruby
-rspec specs
+rspec
 ```
 
 ### Contributors
