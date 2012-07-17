@@ -1,5 +1,5 @@
 module IRail
-  class Request
+  module Request
     def self.get(url)
       request = HTTParty.get(url)
       request.response.body
