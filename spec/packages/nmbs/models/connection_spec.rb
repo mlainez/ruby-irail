@@ -22,4 +22,8 @@ describe IRail::NMBS::Connection do
   it "has a duration in seconds" do
     connection.should respond_to(:duration)
   end
+
+  it "says if there is a delay" do
+    connection.should respond_to(:delay)
+  end
 end
