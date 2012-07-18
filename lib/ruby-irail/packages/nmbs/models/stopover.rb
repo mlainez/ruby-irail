@@ -14,6 +14,7 @@ module IRail::NMBS
     xml_accessor :vehicle,   :as   => Vehicle
     xml_accessor :arrival,   :as   => Step, :from => "arrival"
     xml_accessor :departure, :as   => Step, :from => "departure"
+    xml_accessor :direction, :as   => Station
     xml_reader   :wait_time, :from => "timeBetween", :as => Integer
   end
 end

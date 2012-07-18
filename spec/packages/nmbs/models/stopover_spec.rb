@@ -23,6 +23,10 @@ describe IRail::NMBS::Stopover do
     stopover.should respond_to(:departure)
   end
 
+  it "has a direction station" do
+    stopover.should respond_to(:direction)
+  end
+
   it "has a wait time in seconds" do
     stopover.should respond_to(:wait_time)
   end
