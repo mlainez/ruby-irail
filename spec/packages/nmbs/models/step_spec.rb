@@ -22,4 +22,8 @@ describe IRail::NMBS::Step do
   it "has a platform" do
     step.should respond_to(:platform)
   end
+
+  it "has a direction station" do
+    step.should respond_to(:direction)
+  end
 end

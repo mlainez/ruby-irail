@@ -13,5 +13,6 @@ module IRail::NMBS
     xml_accessor :unix_time, :as   => UnixTime
     xml_accessor :vehicle,   :as   => Vehicle
     xml_accessor :platform,  :as   => Platform
+    xml_accessor :direction, :as   => Station
   end
 end
