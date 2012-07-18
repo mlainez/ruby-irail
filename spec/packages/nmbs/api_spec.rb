@@ -28,6 +28,34 @@ describe IRail::API::NMBS do
     end
   end
 
+  describe :connections do
+    let(:origin_station)      { mock("Origin station") }
+    let(:destination_station) { mock("Destination station") }
+    let(:connections_url)     { mock("Connections url") }
+    let(:xml_connections)     { mock("Xml connections") }
+    let(:connections)         { mock("Connections") }
+
+    before :each do
+      irail.stub(:build_connections_url => connections_url)
+      irail.stub(:get_connections => xml_connections)
+      IRail::NMBS::DocumentParser.stub(:parse_connections => connections)
+    end
+
+    it "builds the connections url" do
+      irail.should_receive(:build_connections_url)
+      irail.connections(origin_station, destination_station)
+    end
+
+    it "gets the connections" do
+      irail.should_receive(:get_connections).with(connections_url, origin_station, destination_station)
+      irail.connections(origin_station, destination_station)
+    end
+
+    it "returns the parsed connections" do
+      irail.connections(origin_station, destination_station).should eql connections
+    end
+  end
+
   describe :get_stations do
     let(:station_list_url) { mock("Url") }
     let(:xml_station_list) { mock("Xml station list") }
@@ -51,6 +79,33 @@ describe IRail::API::NMBS do
 
     it "returns the parsed stations" do
       irail.get_stations.should eql stations
+    end
+  end
+
+  describe :get_connections do
+    let(:origin_station)      { mock("Origin station") }
+    let(:destination_station) { mock("Destination station") }
+    let(:connections_url)     { mock("Connections url") }
+    let(:options_hash)        { mock("Options hash") }
+    let(:response)            { mock("Response") }
+
+    before :each do
+      irail.stub(:build_connections_option_hash => options_hash)
+      IRail::Request.stub(:get => response)
+    end
+
+    it "builds the options hash" do
+      irail.should_receive(:build_connections_option_hash).with(origin_station, destination_station)
+      irail.get_connections(connections_url, origin_station, destination_station)
+    end
+
+    it "calls the connections url through a get request" do
+      IRail::Request.should_receive(:get).with(connections_url, options_hash)
+      irail.get_connections(connections_url, origin_station, destination_station)
+    end
+
+    it "returns the response" do
+      irail.get_connections(connections_url, origin_station, destination_station).should eql response
     end
   end
 
