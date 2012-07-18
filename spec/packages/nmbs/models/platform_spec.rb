@@ -6,4 +6,8 @@ describe IRail::NMBS::Platform do
   it "has an id" do
     platform.should respond_to(:number)
   end
+
+  it "gives information wether the platform is normal or not" do
+    platform.should respond_to(:normal?)
+  end
 end
