@@ -1,3 +1,5 @@
+require "roxml"
+
 module IRail::NMBS
   class Platform
     include ROXML

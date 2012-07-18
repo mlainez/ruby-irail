@@ -5,7 +5,7 @@ require_relative "./vehicle.rb"
 require_relative "./platform.rb"
 
 module IRail::NMBS
-  class Departure
+  class Step
     include ROXML
 
     xml_accessor :delay,     :from => "@delay"
