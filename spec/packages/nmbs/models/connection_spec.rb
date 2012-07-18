@@ -18,4 +18,8 @@ describe IRail::NMBS::Connection do
   it "has a trip" do
     connection.should respond_to(:trip)
   end
+
+  it "has a duration in seconds" do
+    connection.should respond_to(:duration)
+  end
 end
