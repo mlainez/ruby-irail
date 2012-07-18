@@ -77,4 +77,36 @@ describe IRail::NMBS::DocumentParser do
       IRail::NMBS::DocumentParser.parse_connections(xml_string).size.should eql connections.size
     end
   end
+
+  describe :'self.parse_vehicle' do
+    let(:xml_string)       { mock("Xml string") }
+    let(:xml_payload)      { mock("Xml payload") }
+    let(:vehicle)          { mock("Vehicle") }
+    let(:vehicle_instance) { mock("Vehicle instance") }
+
+    before :each do
+      Nokogiri.stub(:XML => xml_payload)
+      xml_payload.stub(:xpath => vehicle)
+      IRail::NMBS::VehicleInformation.stub(:from_xml => vehicle_instance)
+    end
+
+    it "gets the xml payload from the string passed as parameter" do
+      Nokogiri.should_receive(:XML).with(xml_string)
+      IRail::NMBS::DocumentParser.parse_vehicle(xml_string)
+    end
+
+    it "extracts the vehicle from the xml payload" do
+      xml_payload.should_receive(:xpath).with(IRail::NMBS::DocumentParser::VEHICLE_XPATH)
+      IRail::NMBS::DocumentParser.parse_vehicle(xml_string)
+    end
+
+    it "creates a new vehicle for the parsed vehicle attributes" do
+      IRail::NMBS::VehicleInformation.should_receive(:from_xml).with(vehicle.to_s)
+      IRail::NMBS::DocumentParser.parse_vehicle(xml_string)
+    end
+
+    it "returns a vehicule instance" do
+      IRail::NMBS::DocumentParser.parse_vehicle(xml_string).should eql vehicle_instance
+    end
+  end
 end

@@ -32,6 +32,34 @@ describe IRail::API::NMBS do
     end
   end
 
+  describe :vehicle do
+    let(:vehicle_id)  { mock("Vehicle id") }
+    let(:vehicle_url) { mock("Vehicle url") }
+    let(:xml_vehicle) { mock("Xml vehicle") }
+    let(:vehicle)     { mock("vehicle") }
+    let(:options)     { mock("Options") }
+
+    before :each do
+      irail.stub(:build_vehicle_url => vehicle_url)
+      irail.stub(:get_vehicle => xml_vehicle)
+      IRail::NMBS::DocumentParser.stub(:parse_vehicle => vehicle)
+    end
+
+    it "builds the vehicle url" do
+      irail.should_receive(:build_vehicle_url)
+      irail.vehicle(vehicle_id)
+    end
+
+    it "gets the vehicle" do
+      irail.should_receive(:get_vehicle).with(vehicle_url, vehicle_id, options)
+      irail.vehicle(vehicle_id, options)
+    end
+
+    it "returns the parsed vehicle" do
+      irail.vehicle(vehicle_id, options).should eql vehicle
+    end
+  end
+
   describe :stations do
     let(:station_list_url) { mock("Url") }
     let(:xml_station_list) { mock("Xml station list") }

@@ -7,6 +7,10 @@ describe IRail::NMBS::Stopover do
     stopover.should respond_to(:id)
   end
 
+  it "has a delay" do
+    stopover.should respond_to(:delay)
+  end
+
   it "has a station" do
     stopover.should respond_to(:station)
   end
@@ -29,5 +33,9 @@ describe IRail::NMBS::Stopover do
 
   it "has a wait time in seconds" do
     stopover.should respond_to(:wait_time)
+  end
+
+  it "has a unix time" do
+    stopover.should respond_to(:unix_time)
   end
 end
