@@ -2,7 +2,7 @@
 
 IRail makes Belgian railway schedule easily available for anyone.
 
-Check it out on [http://project.irail.be/](http://project.irail.be/)
+Check it out on [http://project.irail.be/](http://project.irail.be/) or [http://data.irail.be/](http://data.irail.be/)
 
 There are already several wrappers available in different languages. This is a Ruby wrapper for their API.
 
@@ -23,11 +23,23 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
+require "ruby-irail"
+
+# get a list of all mivb/stib stations in brussels
+
+irail = IRail::API.new(:stib) # use :mivb symbol instead of :stib if you want
+irail.stations
+
 # get a list of all belgian train stations
 
-require "ruby-irail"
-irail = IRail::API.new
-irail.stations
+irail          = IRail::API.new # by default it takes the nmbs/sncb provider but you can also use :sncb or :nmbs symbols
+train_stations = irail.stations
+
+# get train trips from one station to another
+
+origin      = train_stations.first
+destination = train_stations.last
+irail.connections(origin, destination)
 ```
 
 ## Contributing
