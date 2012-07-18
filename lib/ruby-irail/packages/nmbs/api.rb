@@ -10,14 +10,14 @@ module IRail::API
       IRail::NMBS::DocumentParser.parse_stations(xml_station_list)
     end
 
-    def connections(origin_station, destination_station)
+    def connections(origin_station, destination_station, options = {})
       connections_url = build_connections_url
-      xml_connections = get_connections(connections_url, origin_station, destination_station)
+      xml_connections = get_connections(connections_url, origin_station, destination_station, options)
       IRail::NMBS::DocumentParser.parse_connections(xml_connections)
     end
 
-    def get_connections(connections_url, origin_station, destination_station)
-      options = build_connections_option_hash(origin_station, destination_station)
+    def get_connections(connections_url, origin_station, destination_station, options = {})
+      options = build_connections_option_hash(origin_station, destination_station, options)
       IRail::Request.get(connections_url, options)
     end
 
@@ -27,11 +27,12 @@ module IRail::API
     end
 
     private
-    def build_connections_option_hash(origin_station, destination_station)
+    def build_connections_option_hash(origin_station, destination_station, options = {})
       {
-        :query => {
+        :query => options.merge({
           :from => origin_station.name,
-          :to   => destination_station.name }
+          :to   => destination_station.name
+        })
       }
     end
 

@@ -9,6 +9,7 @@ describe IRail::API::NMBS do
     let(:connections_url)     { mock("Connections url") }
     let(:xml_connections)     { mock("Xml connections") }
     let(:connections)         { mock("Connections") }
+    let(:options)             { mock("Options") }
 
     before :each do
       irail.stub(:build_connections_url => connections_url)
@@ -22,8 +23,8 @@ describe IRail::API::NMBS do
     end
 
     it "gets the connections" do
-      irail.should_receive(:get_connections).with(connections_url, origin_station, destination_station)
-      irail.connections(origin_station, destination_station)
+      irail.should_receive(:get_connections).with(connections_url, origin_station, destination_station, options)
+      irail.connections(origin_station, destination_station, options)
     end
 
     it "returns the parsed connections" do
@@ -64,6 +65,7 @@ describe IRail::API::NMBS do
     let(:connections_url)     { mock("Connections url") }
     let(:options_hash)        { mock("Options hash") }
     let(:response)            { mock("Response") }
+    let(:options)             { mock("Oprions") }
 
     before :each do
       irail.stub(:build_connections_option_hash => options_hash)
@@ -71,8 +73,8 @@ describe IRail::API::NMBS do
     end
 
     it "builds the options hash" do
-      irail.should_receive(:build_connections_option_hash).with(origin_station, destination_station)
-      irail.get_connections(connections_url, origin_station, destination_station)
+      irail.should_receive(:build_connections_option_hash).with(origin_station, destination_station, options)
+      irail.get_connections(connections_url, origin_station, destination_station, options)
     end
 
     it "calls the connections url through a get request" do
