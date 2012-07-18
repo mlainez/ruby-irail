@@ -40,6 +40,10 @@ train_stations = irail.stations
 origin      = train_stations.first
 destination = train_stations.last
 irail.connections(origin, destination)
+
+#get train trip information (all stops for a train)
+
+irail.vehicle("BE.NMBS.IC2240") # the vehicle ids cans be found when querying for a connection
 ```
 
 ## Contributing
