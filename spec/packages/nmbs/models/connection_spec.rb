@@ -11,6 +11,10 @@ describe IRail::NMBS::Connection do
     connection.should respond_to(:departure)
   end
 
+  it "has an arrival" do
+    connection.should respond_to(:arrival)
+  end
+
   it "has a trip" do
     connection.should respond_to(:trip)
   end

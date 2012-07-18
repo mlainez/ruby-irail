@@ -8,6 +8,7 @@ module IRail::NMBS
 
     xml_accessor :id,        :from => "@id", :as => Integer
     xml_accessor :departure, :as   => Step, :from => "departure"
+    xml_accessor :arrival,   :as   => Step, :from => "arrival"
     xml_accessor :trip,      :as   => Trip
   end
 end
