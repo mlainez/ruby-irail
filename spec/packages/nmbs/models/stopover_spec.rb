@@ -22,4 +22,8 @@ describe IRail::NMBS::Stopover do
   it "has a departure" do
     stopover.should respond_to(:departure)
   end
+
+  it "has a wait time in seconds" do
+    stopover.should respond_to(:wait_time)
+  end
 end

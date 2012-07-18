@@ -3,7 +3,7 @@ require_relative '../../../../lib/ruby-irail/packages/nmbs/models/step.rb'
 describe IRail::NMBS::Step do
   let(:step) { IRail::NMBS::Step.new }
 
-  it "has a delay" do
+  it "has a delay in seconds" do
     step.should respond_to(:delay)
   end
 
