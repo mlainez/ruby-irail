@@ -8,7 +8,7 @@ module IRail::NMBS
   class Step
     include ROXML
 
-    xml_accessor :delay,     :from => "@delay"
+    xml_accessor :delay,     :from => "@delay", :as => Integer
     xml_accessor :station,   :as   => Station
     xml_accessor :unix_time, :as   => UnixTime
     xml_accessor :vehicle,   :as   => Vehicle
