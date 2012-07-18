@@ -3,31 +3,6 @@ require_relative "../../../lib/ruby-irail/packages/nmbs/api.rb"
 describe IRail::API::NMBS do
   let(:irail) { IRail::API::NMBS.new }
 
-  describe :stations do
-    let(:stations)         { mock("Stations") }
-    let(:fetched_stations) { mock("Fetched stations") }
-
-    before :each do
-      irail.stub(:get_stations => fetched_stations)
-    end
-
-    it "returns the stations when they were already fetched" do
-      irail.instance_variable_set(:@stations, stations)
-      irail.stations.should eql stations
-    end
-
-    context "when stations have not been fetched yet" do
-      it "fetches them" do
-        irail.should_receive(:get_stations)
-        irail.stations
-      end
-
-      it "returns them" do
-        irail.stations.should eql fetched_stations
-      end
-    end
-  end
-
   describe :connections do
     let(:origin_station)      { mock("Origin station") }
     let(:destination_station) { mock("Destination station") }
@@ -56,10 +31,11 @@ describe IRail::API::NMBS do
     end
   end
 
-  describe :get_stations do
+  describe :stations do
     let(:station_list_url) { mock("Url") }
     let(:xml_station_list) { mock("Xml station list") }
     let(:stations)         { mock("Stations") }
+    let(:options)          { mock("Options") }
 
     before :each do
       irail.stub(:build_station_list_url => station_list_url)
@@ -69,16 +45,16 @@ describe IRail::API::NMBS do
 
     it "builds the station list url" do
       irail.should_receive(:build_station_list_url)
-      irail.get_stations
+      irail.stations(options)
     end
 
     it "gets the xml station list" do
-      irail.should_receive(:get_station_list).with(station_list_url)
-      irail.get_stations
+      irail.should_receive(:get_station_list).with(station_list_url, options)
+      irail.stations(options)
     end
 
     it "returns the parsed stations" do
-      irail.get_stations.should eql stations
+      irail.stations(options).should eql stations
     end
   end
 
@@ -117,13 +93,31 @@ describe IRail::API::NMBS do
       IRail::Request.stub(:get => response)
     end
 
-    it "calls the station list url through a get request" do
-      IRail::Request.should_receive(:get).with(url)
-      irail.get_station_list(url)
+    context "when there are no options" do
+      let(:options) { {} }
+
+      it "calls the station list url through a get request" do
+        IRail::Request.should_receive(:get).with(url, options)
+        irail.get_station_list(url, options)
+      end
+
+      it "returns the response" do
+        irail.get_station_list(url, options).should eql response
+      end
     end
 
-    it "returns the response" do
-      irail.get_station_list(url).should eql response
+    context "when there are options" do
+      let(:options) { {:a => 1} }
+
+      it "calls the station list url with query options" do
+        expected_options = { :query => options }
+        IRail::Request.should_receive(:get).with(url, expected_options)
+        irail.get_station_list(url, options)
+      end
+
+      it "returns the response" do
+        irail.get_station_list(url, options).should eql response
+      end
     end
   end
 end
