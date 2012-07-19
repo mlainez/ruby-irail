@@ -44,6 +44,14 @@ irail.connections(origin, destination)
 #get train trip information (all stops for a train)
 
 irail.vehicle("BE.NMBS.IC2240") # the vehicle ids cans be found when querying for a connection
+
+#get departures from a specific station
+
+irail.departures("BE.NMBS.008813003") # get station identifiers from the stations call
+
+#get arrivals to a specific station
+
+irail.arrivals("BE.NMBS.008813003")
 ```
 
 ## Contributing
