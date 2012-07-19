@@ -27,6 +27,7 @@ module IRail::NMBS
 
     class << self
       alias :parse_departures :parse_liveboard
+      alias :parse_arrivals :parse_liveboard
     end
 
     def self.xml_payload(xml_string, xpath)

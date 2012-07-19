@@ -14,7 +14,7 @@ describe IRail::API::NMBS do
 
     before :each do
       irail.stub(:build_url => connections_url)
-      irail.stub(:get_connections => xml_connections)
+      irail.stub(:call_api => xml_connections)
       irail.stub(:build_connections_option_hash => connections_options)
       IRail::NMBS::DocumentParser.stub(:parse_connections => connections)
     end
@@ -30,7 +30,7 @@ describe IRail::API::NMBS do
     end
 
     it "gets the connections" do
-      irail.should_receive(:get_connections).with(connections_url, connections_options)
+      irail.should_receive(:call_api).with(connections_url, connections_options)
       irail.connections(origin_station, destination_station, options)
     end
 
@@ -49,7 +49,7 @@ describe IRail::API::NMBS do
 
     before :each do
       irail.stub(:build_url => vehicle_url)
-      irail.stub(:get_vehicle => xml_vehicle)
+      irail.stub(:call_api => xml_vehicle)
       irail.stub(:build_vehicle_option_hash => vehicle_options)
       IRail::NMBS::DocumentParser.stub(:parse_vehicle => vehicle)
     end
@@ -65,7 +65,7 @@ describe IRail::API::NMBS do
     end
 
     it "gets the vehicle" do
-      irail.should_receive(:get_vehicle).with(vehicle_url, vehicle_options)
+      irail.should_receive(:call_api).with(vehicle_url, vehicle_options)
       irail.vehicle(vehicle_id, options)
     end
 
@@ -82,7 +82,7 @@ describe IRail::API::NMBS do
 
     before :each do
       irail.stub(:build_url => station_list_url)
-      irail.stub(:get_stations => xml_station_list)
+      irail.stub(:call_api => xml_station_list)
       IRail::NMBS::DocumentParser.stub(:parse_stations => stations)
     end
 
@@ -92,7 +92,7 @@ describe IRail::API::NMBS do
     end
 
     it "gets the xml station list" do
-      irail.should_receive(:get_stations).with(station_list_url, options)
+      irail.should_receive(:call_api).with(station_list_url, options)
       irail.stations(options)
     end
 
@@ -111,13 +111,13 @@ describe IRail::API::NMBS do
 
     before :each do
       irail.stub(:build_url => liveboard_url)
-      irail.stub(:get_departures => xml_departures)
+      irail.stub(:call_api => xml_departures)
       irail.stub(:build_departures_option_hash => departures_options)
       IRail::NMBS::DocumentParser.stub(:parse_departures => liveboard)
     end
 
     it "builds the liveboard url" do
-      irail.should_receive(:build_url).with(IRail::API::NMBS::LIVEBOARD_URI)
+      irail.should_receive(:build_url).with(IRail::API::NMBS::DEPARTURES_URI)
       irail.departures(station_id, options)
     end
 
@@ -127,7 +127,7 @@ describe IRail::API::NMBS do
     end
 
     it "gets the departures xml" do
-      irail.should_receive(:get_departures).with(liveboard_url, departures_options)
+      irail.should_receive(:call_api).with(liveboard_url, departures_options)
       irail.departures(station_id, options)
     end
 
@@ -142,20 +142,27 @@ describe IRail::API::NMBS do
     let(:options)        { mock("Options") }
     let(:liveboard)      { mock("Liveboard") }
     let(:xml_arrivals)   { mock("Xml arrivals") }
+    let(:arrivals_options) { mock("Arrivals options") }
 
     before :each do
       irail.stub(:build_url => liveboard_url)
-      irail.stub(:get_arrivals => xml_arrivals)
-      IRail::NMBS::DocumentParser.stub(:parse_liveboard => liveboard)
+      irail.stub(:call_api => xml_arrivals)
+      irail.stub(:build_arrivals_option_hash => arrivals_options)
+      IRail::NMBS::DocumentParser.stub(:parse_arrivals => liveboard)
     end
 
     it "builds the liveboard url" do
-      irail.should_receive(:build_url).with(IRail::API::NMBS::LIVEBOARD_URI)
+      irail.should_receive(:build_url).with(IRail::API::NMBS::ARRIVALS_URI)
+      irail.arrivals(station_id, options)
+    end
+
+    it "builds the departures options" do
+      irail.should_receive(:build_arrivals_option_hash).with(station_id, options)
       irail.arrivals(station_id, options)
     end
 
     it "gets the arrivals xml" do
-      irail.should_receive(:get_arrivals).with(liveboard_url, station_id, options)
+      irail.should_receive(:call_api).with(liveboard_url, arrivals_options)
       irail.arrivals(station_id, options)
     end
 
@@ -164,13 +171,11 @@ describe IRail::API::NMBS do
     end
   end
 
-  describe :get_connections do
-    let(:origin_station)      { mock("Origin station") }
-    let(:destination_station) { mock("Destination station") }
-    let(:connections_url)     { mock("Connections url") }
-    let(:options_hash)        { mock("Options hash") }
-    let(:response)            { mock("Response") }
-    let(:options)             { mock("Oprions") }
+  describe :call_api do
+    let(:url)           { mock("Connections url") }
+    let(:options_hash)  { mock("Options hash") }
+    let(:response)      { mock("Response") }
+    let(:options)       { mock("Oprions") }
 
     before :each do
       irail.stub(:build_query_options_hash => options_hash)
@@ -179,106 +184,16 @@ describe IRail::API::NMBS do
 
     it "builds the options hash" do
       irail.should_receive(:build_query_options_hash).with(options)
-      irail.get_connections(connections_url, options)
+      irail.call_api(url, options)
     end
 
     it "calls the connections url through a get request" do
-      IRail::Request.should_receive(:get).with(connections_url, options_hash)
-      irail.get_connections(connections_url, options)
+      IRail::Request.should_receive(:get).with(url, options_hash)
+      irail.call_api(url, options)
     end
 
     it "returns the response" do
-      irail.get_connections(connections_url, options).should eql response
-    end
-  end
-
-  describe :get_departures do
-    let(:station_id)    { mock("Station id") }
-    let(:options)       { mock("Options") }
-    let(:liveboard_url) { mock("Liveboard url") }
-    let(:options_hash)  { mock("Options hash") }
-    let(:response)      { mock("Response") }
-
-    before :each do
-      irail.stub(:build_query_options_hash => options_hash)
-      IRail::Request.stub(:get => response)
-    end
-
-    it "builds the options hash" do
-      irail.should_receive(:build_query_options_hash).with(options)
-      irail.get_departures(liveboard_url, options)
-    end
-
-    it "calls the connections url through a get request" do
-      IRail::Request.should_receive(:get).with(liveboard_url, options_hash)
-      irail.get_departures(liveboard_url, options)
-    end
-
-    it "returns the response" do
-      irail.get_departures(liveboard_url, options).should eql response
-    end
-  end
-
-  describe :get_arrivals do
-    let(:station_id)    { mock("Station id") }
-    let(:options)       { mock("Options") }
-    let(:liveboard_url) { mock("Liveboard url") }
-    let(:options_hash)  { mock("Options hash") }
-    let(:response)      { mock("Response") }
-
-    before :each do
-      irail.stub(:build_arrivals_option_hash => options_hash)
-      IRail::Request.stub(:get => response)
-    end
-
-    it "builds the options hash" do
-      irail.should_receive(:build_arrivals_option_hash).with(station_id, options)
-      irail.get_arrivals(liveboard_url, station_id, options)
-    end
-
-    it "calls the connections url through a get request" do
-      IRail::Request.should_receive(:get).with(liveboard_url, options_hash)
-      irail.get_arrivals(liveboard_url, station_id, options)
-    end
-
-    it "returns the response" do
-      irail.get_arrivals(liveboard_url, station_id, options).should eql response
-    end
-  end
-
-  describe :get_stations do
-    let(:url)      { mock("Url") }
-    let(:response) { mock("Response") }
-
-    before :each do
-      IRail::Request.stub(:get => response)
-    end
-
-    context "when there are no options" do
-      let(:options) { {} }
-
-      it "calls the station list url through a get request" do
-        IRail::Request.should_receive(:get).with(url, {:query => options})
-        irail.get_stations(url, options)
-      end
-
-      it "returns the response" do
-        irail.get_stations(url, options).should eql response
-      end
-    end
-
-    context "when there are options" do
-      let(:options) { {:a => 1} }
-
-      it "calls the station list url with query options" do
-        expected_options = { :query => options }
-        IRail::Request.should_receive(:get).with(url, expected_options)
-        irail.get_stations(url, options)
-      end
-
-      it "returns the response" do
-        irail.get_stations(url, options).should eql response
-      end
+      irail.call_api(url, options).should eql response
     end
   end
 end

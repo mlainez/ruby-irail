@@ -5,7 +5,7 @@ module IRail::API
     CONNECTIONS_URI = "connections/"
     VEHICLE_URI     = "vehicle/"
     DEPARTURES_URI  = "liveboard/"
-    LIVEBOARD_URI   = "liveboard/"
+    ARRIVALS_URI    = "liveboard/"
 
     def stations(options = {})
       get_resource(:stations, options)
@@ -26,42 +26,21 @@ module IRail::API
       get_resource(:departures, options)
     end
 
+    def arrivals(station_id, options = {})
+      options = build_arrivals_option_hash(station_id, options)
+      get_resource(:arrivals, options)
+    end
+
     def get_resource(resource, options)
       uri = IRail::API::NMBS.const_get("#{resource.upcase}_URI")
       url = build_url(uri)
-      xml = send("get_#{resource}", url, options)
+      xml = call_api(url, options)
       IRail::NMBS::DocumentParser.send("parse_#{resource}", xml)
     end
 
-    def arrivals(station_id, options = {})
-      liveboard_url = build_url(LIVEBOARD_URI)
-      xml_arrivals  = get_arrivals(liveboard_url, station_id, options)
-      IRail::NMBS::DocumentParser.parse_liveboard(xml_arrivals)
-    end
-
-    def get_stations(station_list_url, options = {})
+    def call_api(url, options = {})
       options = build_query_options_hash(options)
-      IRail::Request.get(station_list_url, options)
-    end
-
-    def get_connections(connections_url, options = {})
-      options = build_query_options_hash(options)
-      IRail::Request.get(connections_url, options)
-    end
-
-    def get_vehicle(vehicle_url, options = {})
-      options = build_query_options_hash(options)
-      IRail::Request.get(vehicle_url, options)
-    end
-
-    def get_departures(liveboard_url, options = {})
-      options = build_query_options_hash(options)
-      IRail::Request.get(liveboard_url, options)
-    end
-
-    def get_arrivals(liveboard_url, station_id, options = {})
-      options = build_arrivals_option_hash(station_id, options)
-      IRail::Request.get(liveboard_url, options)
+      IRail::Request.get(url, options)
     end
 
     private
@@ -71,8 +50,8 @@ module IRail::API
 
     def build_connections_option_hash(origin_station, destination_station, options = {})
       options.merge({
-          :from => origin_station.name,
-          :to   => destination_station.name
+        :from => origin_station.name,
+        :to   => destination_station.name
       })
     end
 
@@ -82,18 +61,16 @@ module IRail::API
 
     def build_departures_option_hash(station_id, options = {})
       options.merge({
-          :id     => station_id,
-          :arrdep => "DEP"
+        :id     => station_id,
+        :arrdep => "DEP"
       })
     end
 
     def build_arrivals_option_hash(station_id, options = {})
-      {
-        :query => options.merge({
-          :id     => station_id,
-          :arrdep => "ARR"
-        })
-      }
+      options.merge({
+        :id     => station_id,
+        :arrdep => "ARR"
+      })
     end
 
     def build_url(uri)
