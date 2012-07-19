@@ -87,6 +87,62 @@ describe IRail::API::NMBS do
     end
   end
 
+  describe :departures do
+    let(:liveboard_url)  { mock("Url") }
+    let(:station_id)     { mock("Station id") }
+    let(:options)        { mock("Options") }
+    let(:liveboard)      { mock("Liveboard") }
+    let(:xml_departures) { mock("Xml departures") }
+
+    before :each do
+      irail.stub(:build_liveboard_url => liveboard_url)
+      irail.stub(:get_departures => xml_departures)
+      IRail::NMBS::DocumentParser.stub(:parse_liveboard => liveboard)
+    end
+
+    it "builds the liveboard url" do
+      irail.should_receive(:build_liveboard_url)
+      irail.departures(station_id, options)
+    end
+
+    it "gets the departures xml" do
+      irail.should_receive(:get_departures).with(liveboard_url, station_id, options)
+      irail.departures(station_id, options)
+    end
+
+    it "returns the liveboard" do
+      irail.departures(station_id, options).should eql liveboard
+    end
+  end
+
+  describe :arrivals do
+    let(:liveboard_url)  { mock("Url") }
+    let(:station_id)     { mock("Station id") }
+    let(:options)        { mock("Options") }
+    let(:liveboard)      { mock("Liveboard") }
+    let(:xml_arrivals)   { mock("Xml arrivals") }
+
+    before :each do
+      irail.stub(:build_liveboard_url => liveboard_url)
+      irail.stub(:get_arrivals => xml_arrivals)
+      IRail::NMBS::DocumentParser.stub(:parse_liveboard => liveboard)
+    end
+
+    it "builds the liveboard url" do
+      irail.should_receive(:build_liveboard_url)
+      irail.arrivals(station_id, options)
+    end
+
+    it "gets the arrivals xml" do
+      irail.should_receive(:get_arrivals).with(liveboard_url, station_id, options)
+      irail.arrivals(station_id, options)
+    end
+
+    it "returns the parsed departures" do
+      irail.arrivals(station_id, options).should eql liveboard
+    end
+  end
+
   describe :get_connections do
     let(:origin_station)      { mock("Origin station") }
     let(:destination_station) { mock("Destination station") }
@@ -112,6 +168,60 @@ describe IRail::API::NMBS do
 
     it "returns the response" do
       irail.get_connections(connections_url, origin_station, destination_station).should eql response
+    end
+  end
+
+  describe :get_departures do
+    let(:station_id)    { mock("Station id") }
+    let(:options)       { mock("Options") }
+    let(:liveboard_url) { mock("Liveboard url") }
+    let(:options_hash)  { mock("Options hash") }
+    let(:response)      { mock("Response") }
+
+    before :each do
+      irail.stub(:build_departures_option_hash => options_hash)
+      IRail::Request.stub(:get => response)
+    end
+
+    it "builds the options hash" do
+      irail.should_receive(:build_departures_option_hash).with(station_id, options)
+      irail.get_departures(liveboard_url, station_id, options)
+    end
+
+    it "calls the connections url through a get request" do
+      IRail::Request.should_receive(:get).with(liveboard_url, options_hash)
+      irail.get_departures(liveboard_url, station_id, options)
+    end
+
+    it "returns the response" do
+      irail.get_departures(liveboard_url, station_id, options).should eql response
+    end
+  end
+
+  describe :get_arrivals do
+    let(:station_id)    { mock("Station id") }
+    let(:options)       { mock("Options") }
+    let(:liveboard_url) { mock("Liveboard url") }
+    let(:options_hash)  { mock("Options hash") }
+    let(:response)      { mock("Response") }
+
+    before :each do
+      irail.stub(:build_arrivals_option_hash => options_hash)
+      IRail::Request.stub(:get => response)
+    end
+
+    it "builds the options hash" do
+      irail.should_receive(:build_arrivals_option_hash).with(station_id, options)
+      irail.get_arrivals(liveboard_url, station_id, options)
+    end
+
+    it "calls the connections url through a get request" do
+      IRail::Request.should_receive(:get).with(liveboard_url, options_hash)
+      irail.get_arrivals(liveboard_url, station_id, options)
+    end
+
+    it "returns the response" do
+      irail.get_arrivals(liveboard_url, station_id, options).should eql response
     end
   end
 

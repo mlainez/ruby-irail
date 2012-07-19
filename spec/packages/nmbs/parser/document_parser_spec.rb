@@ -12,6 +12,9 @@ describe IRail::NMBS::DocumentParser do
   class IRail::NMBS::Connection
   end
 
+  class IRail::NMBS::Liveboard
+  end
+
   describe :'self.parse_stations' do
     let(:xml_string)  { mock("Xml string") }
     let(:xml_payload) { mock("Xml payload") }
@@ -107,6 +110,25 @@ describe IRail::NMBS::DocumentParser do
 
     it "returns a vehicule instance" do
       IRail::NMBS::DocumentParser.parse_vehicle(xml_string).should eql vehicle_instance
+    end
+  end
+
+  describe :'self.parse_liveboard' do
+    let(:xml_string)         { mock("Xml string") }
+    let(:liveboard)          { mock("Loveboard") }
+    let(:liveboard_instance) { mock("Liveboard instance") }
+
+    before :each do
+      IRail::NMBS::Liveboard.stub(:from_xml => liveboard_instance)
+    end
+
+    it "creates a liveboard from the xml payload" do
+      IRail::NMBS::Liveboard.should_receive(:from_xml).with(xml_string)
+      IRail::NMBS::DocumentParser.parse_liveboard(xml_string)
+    end
+
+    it "returns a liveboard instance" do
+      IRail::NMBS::DocumentParser.parse_liveboard(xml_string).should eql liveboard_instance
     end
   end
 end

@@ -21,6 +21,10 @@ module IRail::NMBS
       IRail::NMBS::VehicleInformation.from_xml(vehicle.to_s)
     end
 
+    def self.parse_liveboard(xml_string)
+      IRail::NMBS::Liveboard.from_xml(xml_string)
+    end
+
     def self.xml_vehicle(xml_string)
       xml_payload = Nokogiri::XML(xml_string)
       xml_payload.xpath(VEHICLE_XPATH)
