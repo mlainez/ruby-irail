@@ -7,15 +7,19 @@ module IRail::API
     LIVEBOARD_URI   = "liveboard/"
 
     def stations(options = {})
-      station_list_url = build_url(STATIONS_URI)
-      xml_station_list = get_stations(station_list_url, options)
-      IRail::NMBS::DocumentParser.parse_stations(xml_station_list)
+      get_resource(:stations, options)
     end
 
     def connections(origin_station, destination_station, options = {})
-      connections_url = build_url(CONNECTIONS_URI)
-      xml_connections = get_connections(connections_url, origin_station, destination_station, options)
-      IRail::NMBS::DocumentParser.parse_connections(xml_connections)
+      options = build_connections_option_hash(origin_station, destination_station, options)
+      get_resource(:connections, options)
+    end
+
+    def get_resource(resource, options)
+      uri = IRail::API::NMBS.const_get("#{resource.upcase}_URI")
+      url = build_url(uri)
+      xml = send("get_#{resource}", url, options)
+      IRail::NMBS::DocumentParser.send("parse_#{resource}", xml)
     end
 
     def vehicle(vehicle_id, options = {})
@@ -37,12 +41,12 @@ module IRail::API
     end
 
     def get_stations(station_list_url, options = {})
-      options = { :query => options } if options.any?
+      options = build_query_options_hash(options)
       IRail::Request.get(station_list_url, options)
     end
 
-    def get_connections(connections_url, origin_station, destination_station, options = {})
-      options = build_connections_option_hash(origin_station, destination_station, options)
+    def get_connections(connections_url, options = {})
+      options = build_query_options_hash(options)
       IRail::Request.get(connections_url, options)
     end
 
@@ -62,13 +66,15 @@ module IRail::API
     end
 
     private
+    def build_query_options_hash(options)
+      { :query => options }
+    end
+
     def build_connections_option_hash(origin_station, destination_station, options = {})
-      {
-        :query => options.merge({
+      options.merge({
           :from => origin_station.name,
           :to   => destination_station.name
-        })
-      }
+      })
     end
 
     def build_vehicle_option_hash(vehicle_id, options = {})
