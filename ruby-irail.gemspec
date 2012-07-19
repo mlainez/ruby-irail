@@ -17,5 +17,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rspec"
   gem.add_dependency "httparty"
   gem.add_dependency "roxml"
+  gem.add_dependency "json"
   gem.add_dependency "nokogiri"
 end
