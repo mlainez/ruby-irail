@@ -7,36 +7,36 @@ module IRail::API
     LIVEBOARD_URI   = "liveboard/"
 
     def stations(options = {})
-      station_list_url = build_station_list_url
-      xml_station_list = get_station_list(station_list_url, options)
+      station_list_url = build_url(STATIONS_URI)
+      xml_station_list = get_stations(station_list_url, options)
       IRail::NMBS::DocumentParser.parse_stations(xml_station_list)
     end
 
     def connections(origin_station, destination_station, options = {})
-      connections_url = build_connections_url
+      connections_url = build_url(CONNECTIONS_URI)
       xml_connections = get_connections(connections_url, origin_station, destination_station, options)
       IRail::NMBS::DocumentParser.parse_connections(xml_connections)
     end
 
     def vehicle(vehicle_id, options = {})
-      vehicle_url = build_vehicle_url
+      vehicle_url = build_url(VEHICLE_URI)
       xml_vehicle = get_vehicle(vehicle_url, vehicle_id, options)
       IRail::NMBS::DocumentParser.parse_vehicle(xml_vehicle)
     end
 
     def departures(station_id, options = {})
-      liveboard_url  = build_liveboard_url
+      liveboard_url  = build_url(LIVEBOARD_URI)
       xml_departures = get_departures(liveboard_url, station_id, options)
       IRail::NMBS::DocumentParser.parse_liveboard(xml_departures)
     end
 
     def arrivals(station_id, options = {})
-      liveboard_url = build_liveboard_url
+      liveboard_url = build_url(LIVEBOARD_URI)
       xml_arrivals  = get_arrivals(liveboard_url, station_id, options)
       IRail::NMBS::DocumentParser.parse_liveboard(xml_arrivals)
     end
 
-    def get_station_list(station_list_url, options = {})
+    def get_stations(station_list_url, options = {})
       options = { :query => options } if options.any?
       IRail::Request.get(station_list_url, options)
     end
@@ -97,20 +97,8 @@ module IRail::API
       }
     end
 
-    def build_station_list_url
-      [API_URL, STATIONS_URI].join('/')
-    end
-
-    def build_connections_url
-      [API_URL, CONNECTIONS_URI].join('/')
-    end
-
-    def build_vehicle_url
-      [API_URL, VEHICLE_URI].join('/')
-    end
-
-    def build_liveboard_url
-      [API_URL, LIVEBOARD_URI].join('/')
+    def build_url(uri)
+      [API_URL, uri].join('/')
     end
   end
 end
