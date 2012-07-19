@@ -40,15 +40,17 @@ describe IRail::API::NMBS do
   end
 
   describe :vehicle do
-    let(:vehicle_id)  { mock("Vehicle id") }
-    let(:vehicle_url) { mock("Vehicle url") }
-    let(:xml_vehicle) { mock("Xml vehicle") }
-    let(:vehicle)     { mock("vehicle") }
-    let(:options)     { mock("Options") }
+    let(:vehicle_id)      { mock("Vehicle id") }
+    let(:vehicle_url)     { mock("Vehicle url") }
+    let(:xml_vehicle)     { mock("Xml vehicle") }
+    let(:vehicle)         { mock("vehicle") }
+    let(:options)         { mock("Options") }
+    let(:vehicle_options) { mock("Vehicle options") }
 
     before :each do
       irail.stub(:build_url => vehicle_url)
       irail.stub(:get_vehicle => xml_vehicle)
+      irail.stub(:build_vehicle_option_hash => vehicle_options)
       IRail::NMBS::DocumentParser.stub(:parse_vehicle => vehicle)
     end
 
@@ -57,8 +59,13 @@ describe IRail::API::NMBS do
       irail.vehicle(vehicle_id)
     end
 
+    it "builds the vehicle options" do
+      irail.should_receive(:build_vehicle_option_hash).with(vehicle_id, options)
+      irail.vehicle(vehicle_id, options)
+    end
+
     it "gets the vehicle" do
-      irail.should_receive(:get_vehicle).with(vehicle_url, vehicle_id, options)
+      irail.should_receive(:get_vehicle).with(vehicle_url, vehicle_options)
       irail.vehicle(vehicle_id, options)
     end
 
@@ -100,11 +107,13 @@ describe IRail::API::NMBS do
     let(:options)        { mock("Options") }
     let(:liveboard)      { mock("Liveboard") }
     let(:xml_departures) { mock("Xml departures") }
+    let(:departures_options) { mock("Departures options") }
 
     before :each do
       irail.stub(:build_url => liveboard_url)
       irail.stub(:get_departures => xml_departures)
-      IRail::NMBS::DocumentParser.stub(:parse_liveboard => liveboard)
+      irail.stub(:build_departures_option_hash => departures_options)
+      IRail::NMBS::DocumentParser.stub(:parse_departures => liveboard)
     end
 
     it "builds the liveboard url" do
@@ -112,8 +121,13 @@ describe IRail::API::NMBS do
       irail.departures(station_id, options)
     end
 
+    it "builds the departures options" do
+      irail.should_receive(:build_departures_option_hash).with(station_id, options)
+      irail.departures(station_id, options)
+    end
+
     it "gets the departures xml" do
-      irail.should_receive(:get_departures).with(liveboard_url, station_id, options)
+      irail.should_receive(:get_departures).with(liveboard_url, departures_options)
       irail.departures(station_id, options)
     end
 
@@ -186,22 +200,22 @@ describe IRail::API::NMBS do
     let(:response)      { mock("Response") }
 
     before :each do
-      irail.stub(:build_departures_option_hash => options_hash)
+      irail.stub(:build_query_options_hash => options_hash)
       IRail::Request.stub(:get => response)
     end
 
     it "builds the options hash" do
-      irail.should_receive(:build_departures_option_hash).with(station_id, options)
-      irail.get_departures(liveboard_url, station_id, options)
+      irail.should_receive(:build_query_options_hash).with(options)
+      irail.get_departures(liveboard_url, options)
     end
 
     it "calls the connections url through a get request" do
       IRail::Request.should_receive(:get).with(liveboard_url, options_hash)
-      irail.get_departures(liveboard_url, station_id, options)
+      irail.get_departures(liveboard_url, options)
     end
 
     it "returns the response" do
-      irail.get_departures(liveboard_url, station_id, options).should eql response
+      irail.get_departures(liveboard_url, options).should eql response
     end
   end
 

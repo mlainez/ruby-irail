@@ -25,6 +25,10 @@ module IRail::NMBS
       IRail::NMBS::Liveboard.from_xml(xml_string)
     end
 
+    class << self
+      alias :parse_departures :parse_liveboard
+    end
+
     def self.xml_payload(xml_string, xpath)
       xml_payload = Nokogiri::XML(xml_string)
       xml_payload.xpath(xpath)
