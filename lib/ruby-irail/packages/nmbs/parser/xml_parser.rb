@@ -1,5 +1,5 @@
 module IRail::NMBS
-  class DocumentParser
+  class XMLParser
     STATION_XPATH    = "//station"
     CONNECTION_XPATH = "//connection"
     VEHICLE_XPATH    = "//vehicleinformation"

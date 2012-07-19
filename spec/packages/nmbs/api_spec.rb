@@ -16,7 +16,7 @@ describe IRail::API::NMBS do
       irail.stub(:build_url => connections_url)
       irail.stub(:call_api => xml_connections)
       irail.stub(:build_connections_option_hash => connections_options)
-      IRail::NMBS::DocumentParser.stub(:parse_connections => connections)
+      IRail::NMBS::XMLParser.stub(:parse_connections => connections)
     end
 
     it "builds the connections url" do
@@ -51,7 +51,7 @@ describe IRail::API::NMBS do
       irail.stub(:build_url => vehicle_url)
       irail.stub(:call_api => xml_vehicle)
       irail.stub(:build_vehicle_option_hash => vehicle_options)
-      IRail::NMBS::DocumentParser.stub(:parse_vehicle => vehicle)
+      IRail::NMBS::XMLParser.stub(:parse_vehicle => vehicle)
     end
 
     it "builds the vehicle url" do
@@ -83,7 +83,7 @@ describe IRail::API::NMBS do
     before :each do
       irail.stub(:build_url => station_list_url)
       irail.stub(:call_api => xml_station_list)
-      IRail::NMBS::DocumentParser.stub(:parse_stations => stations)
+      IRail::NMBS::XMLParser.stub(:parse_stations => stations)
     end
 
     it "builds the station list url" do
@@ -113,7 +113,7 @@ describe IRail::API::NMBS do
       irail.stub(:build_url => liveboard_url)
       irail.stub(:call_api => xml_departures)
       irail.stub(:build_departures_option_hash => departures_options)
-      IRail::NMBS::DocumentParser.stub(:parse_departures => liveboard)
+      IRail::NMBS::XMLParser.stub(:parse_departures => liveboard)
     end
 
     it "builds the liveboard url" do
@@ -148,7 +148,7 @@ describe IRail::API::NMBS do
       irail.stub(:build_url => liveboard_url)
       irail.stub(:call_api => xml_arrivals)
       irail.stub(:build_arrivals_option_hash => arrivals_options)
-      IRail::NMBS::DocumentParser.stub(:parse_arrivals => liveboard)
+      IRail::NMBS::XMLParser.stub(:parse_arrivals => liveboard)
     end
 
     it "builds the liveboard url" do

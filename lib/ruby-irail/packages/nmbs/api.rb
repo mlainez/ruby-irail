@@ -35,7 +35,7 @@ module IRail::API
       uri = IRail::API::NMBS.const_get("#{resource.upcase}_URI")
       url = build_url(uri)
       xml = call_api(url, options)
-      IRail::NMBS::DocumentParser.send("parse_#{resource}", xml)
+      IRail::NMBS::XMLParser.send("parse_#{resource}", xml)
     end
 
     def call_api(url, options = {})

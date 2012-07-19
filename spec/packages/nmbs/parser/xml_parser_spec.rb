@@ -1,6 +1,6 @@
-require_relative "../../../../lib/ruby-irail/packages/nmbs/parser/document_parser.rb"
+require_relative "../../../../lib/ruby-irail/packages/nmbs/parser/xml_parser.rb"
 
-describe IRail::NMBS::DocumentParser do
+describe IRail::NMBS::XMLParser do
   module Nokogiri
     module XML
     end
@@ -28,23 +28,23 @@ describe IRail::NMBS::DocumentParser do
 
     it "gets the xml payload from the string passed as parameter" do
       Nokogiri.should_receive(:XML).with(xml_string)
-      IRail::NMBS::DocumentParser.parse_stations(xml_string)
+      IRail::NMBS::XMLParser.parse_stations(xml_string)
     end
 
     it "extracts the stations from the xml payload" do
-      xml_payload.should_receive(:xpath).with(IRail::NMBS::DocumentParser::STATION_XPATH)
-      IRail::NMBS::DocumentParser.parse_stations(xml_string)
+      xml_payload.should_receive(:xpath).with(IRail::NMBS::XMLParser::STATION_XPATH)
+      IRail::NMBS::XMLParser.parse_stations(xml_string)
     end
 
     it "creates a new station for all parsed station attributes" do
       stations.each do |station|
         IRail::NMBS::Station.should_receive(:from_xml).with(station.to_s)
       end
-      IRail::NMBS::DocumentParser.parse_stations(xml_string)
+      IRail::NMBS::XMLParser.parse_stations(xml_string)
     end
 
     it "returns as many stations as in the xml payload" do
-      IRail::NMBS::DocumentParser.parse_stations(xml_string).size.should eql stations.size
+      IRail::NMBS::XMLParser.parse_stations(xml_string).size.should eql stations.size
     end
   end
 
@@ -61,23 +61,23 @@ describe IRail::NMBS::DocumentParser do
 
     it "gets the xml payload from the string passed as parameter" do
       Nokogiri.should_receive(:XML).with(xml_string)
-      IRail::NMBS::DocumentParser.parse_connections(xml_string)
+      IRail::NMBS::XMLParser.parse_connections(xml_string)
     end
 
     it "extracts the connections from the xml payload" do
-      xml_payload.should_receive(:xpath).with(IRail::NMBS::DocumentParser::CONNECTION_XPATH)
-      IRail::NMBS::DocumentParser.parse_connections(xml_string)
+      xml_payload.should_receive(:xpath).with(IRail::NMBS::XMLParser::CONNECTION_XPATH)
+      IRail::NMBS::XMLParser.parse_connections(xml_string)
     end
 
     it "creates a new connection for all parsed connection attributes" do
       connections.each do |connection|
         IRail::NMBS::Connection.should_receive(:from_xml).with(connection.to_s)
       end
-      IRail::NMBS::DocumentParser.parse_connections(xml_string)
+      IRail::NMBS::XMLParser.parse_connections(xml_string)
     end
 
     it "returns as many connections as in the xml payload" do
-      IRail::NMBS::DocumentParser.parse_connections(xml_string).size.should eql connections.size
+      IRail::NMBS::XMLParser.parse_connections(xml_string).size.should eql connections.size
     end
   end
 
@@ -95,21 +95,21 @@ describe IRail::NMBS::DocumentParser do
 
     it "gets the xml payload from the string passed as parameter" do
       Nokogiri.should_receive(:XML).with(xml_string)
-      IRail::NMBS::DocumentParser.parse_vehicle(xml_string)
+      IRail::NMBS::XMLParser.parse_vehicle(xml_string)
     end
 
     it "extracts the vehicle from the xml payload" do
-      xml_payload.should_receive(:xpath).with(IRail::NMBS::DocumentParser::VEHICLE_XPATH)
-      IRail::NMBS::DocumentParser.parse_vehicle(xml_string)
+      xml_payload.should_receive(:xpath).with(IRail::NMBS::XMLParser::VEHICLE_XPATH)
+      IRail::NMBS::XMLParser.parse_vehicle(xml_string)
     end
 
     it "creates a new vehicle for the parsed vehicle attributes" do
       IRail::NMBS::VehicleInformation.should_receive(:from_xml).with(vehicle.to_s)
-      IRail::NMBS::DocumentParser.parse_vehicle(xml_string)
+      IRail::NMBS::XMLParser.parse_vehicle(xml_string)
     end
 
     it "returns a vehicule instance" do
-      IRail::NMBS::DocumentParser.parse_vehicle(xml_string).should eql vehicle_instance
+      IRail::NMBS::XMLParser.parse_vehicle(xml_string).should eql vehicle_instance
     end
   end
 
@@ -124,11 +124,11 @@ describe IRail::NMBS::DocumentParser do
 
     it "creates a liveboard from the xml payload" do
       IRail::NMBS::Liveboard.should_receive(:from_xml).with(xml_string)
-      IRail::NMBS::DocumentParser.parse_liveboard(xml_string)
+      IRail::NMBS::XMLParser.parse_liveboard(xml_string)
     end
 
     it "returns a liveboard instance" do
-      IRail::NMBS::DocumentParser.parse_liveboard(xml_string).should eql liveboard_instance
+      IRail::NMBS::XMLParser.parse_liveboard(xml_string).should eql liveboard_instance
     end
   end
 end
